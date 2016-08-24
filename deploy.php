@@ -26,18 +26,37 @@ task('copy:dotenv', function () {
 
 after('deploy:symlink', 'copy:dotenv');
 
+/**
+ * Main task (Overwritting Default Laravel Task
+ */
+task('deploy', [
+    'deploy:prepare',
+    'deploy:release',
+    'deploy:update_code',
+    'deploy:shared',
+    'deploy:vendors',
+    'deploy:writable',
+    'deploy:symlink',
+    'cleanup',
+    'artisan:cache:clear',
+])->desc('Deploy your project');
+
 // Production Server
-$stageName = 'production';
 server('prod1', 'prod1.places')
     ->configFile('/home/vagrant/.ssh/config')
     ->env('deploy_path', '/opt/pear-places-api')
-    ->env('stage_name', $stageName)
-    ->stage($stageName);
+    ->env('stage_name', 'production')
+    ->stage('production');
+
+server('prod2', 'prod2.places')
+    ->configFile('/home/vagrant/.ssh/config')
+    ->env('deploy_path', '/opt/pear-places-api')
+    ->env('stage_name', 'production')
+    ->stage('production');
 
 // Staging Server
-$stageName = 'staging';
 server('stage1', 'stage1.places')
     ->configFile('/home/vagrant/.ssh/config')
     ->env('deploy_path', '/opt/pear-places-api')
-    ->env('stage_name', $stageName)
-    ->stage($stageName);
+    ->env('stage_name', 'staging')
+    ->stage('staging');
