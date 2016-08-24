@@ -39,6 +39,7 @@
         <div class="container">
             <div class="content">
                 <div class="title">Laravel 5</div>
+                <p>API version 0.1.0</p>
             </div>
         </div>
     </body>
