@@ -15,4 +15,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('test', function () {
+   return response()->json(['status' => 'successful']);
+});
+
 Route::get('/places/nearby', ['uses' => 'PlaceController@searchNearby']);
