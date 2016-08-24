@@ -8,6 +8,7 @@ set('default_stage', 'staging');
 // Set configurations
 set('repository', 'git@github.com:ApparelMedia/pear-places-api.git');
 set('writable_dirs', ['storage']);
+set('writable_use_sudo', false);
 set('shared_files', ['.env']);
 set('shared_dirs', [
     'storage/app',
@@ -18,12 +19,12 @@ set('shared_dirs', [
 ]);
 
 task('copy:dotenv', function () {
-    $sourceDotEnv = '/opt/pear-places-api/shared/.env.' . env('stage_name');
+    $sourceDotEnv = env('deploy_path') . '/shared/.env.' . env('stage_name');
     $targetDotEnv = env('deploy_path') .'/shared/.env';
     run("cp $sourceDotEnv $targetDotEnv");
 })->desc('Copying .env file from file published by CI WebOps');
 
-//after('deploy:symlink', 'copy:dotenv');
+after('deploy:symlink', 'copy:dotenv');
 
 // Production Server
 $stageName = 'production';
