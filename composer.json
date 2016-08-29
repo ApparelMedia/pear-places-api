@@ -10,7 +10,8 @@
         "guzzlehttp/guzzle": "^6.2",
         "league/fractal": "^0.13.0",
         "anthonymartin/geo-location": "^1.0",
-        "league/oauth2-client": "^1.4"
+        "league/oauth2-client": "^1.4",
+        "gordalina/cachetool": "^2.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
