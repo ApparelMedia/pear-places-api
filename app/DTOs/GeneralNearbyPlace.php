@@ -20,4 +20,6 @@ class GeneralNearbyPlace extends AbstractDTO
      * @var float
      */
     public $long;
+
+    public $id;
 }

@@ -13,6 +13,7 @@ class CreateSponsoredLocationsTable extends Migration
     public function up()
     {
         Schema::create('sponsored_locations', function (Blueprint $table) {
+            //TODO Update Properties
             $table->increments('id');
             $table->string('name');
             $table->string('description');

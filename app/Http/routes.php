@@ -20,3 +20,6 @@ Route::get('test', function () {
 });
 
 Route::get('/places/nearby', ['uses' => 'PlaceController@searchNearby']);
+
+Route::post('venues/batch', ['uses' => 'VenueController@batchCreate']);
+Route::resource('venues', 'VenueController');

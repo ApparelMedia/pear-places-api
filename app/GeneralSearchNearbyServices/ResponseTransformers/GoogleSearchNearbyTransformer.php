@@ -27,6 +27,7 @@ class GoogleSearchNearbyTransformer implements TransformerInterface
 
     protected function transform($entity) {
         return new GeneralNearbyPlace([
+            'id' => $entity->place_id,
             'name' => $entity->name,
             'lat' => $entity->geometry->location->lat,
             'long' => $entity->geometry->location->lng,

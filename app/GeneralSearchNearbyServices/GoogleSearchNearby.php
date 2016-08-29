@@ -21,7 +21,7 @@ class GoogleSearchNearby extends AbstractSearchNearbyService
             'key' => $this->apiKey,
             'location' => "$lat,$long",
             'radius' => $this->searchRadiusMeters,
-            'type' => 'food',
+            'type' => 'bar',
         ];
         $res = $client->request('GET', $path, ['query' => $queries]);
         $transformer = new $this->transformerClass(json_decode($res->getBody()));
