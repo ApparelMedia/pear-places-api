@@ -4,13 +4,15 @@ use App\Support\Contracts\TransformerInterface;
 use App\DTOs\GeneralNearbyPlace;
 use Illuminate\Support\Collection;
 
-class FoursquareSearchNearbyTransformer implements TransformerInterface
+class FoursquareSearchNearbyTransformer extends AbstractSearchNearbyTransformer  implements TransformerInterface
 {
     protected $response;
 
-    function __construct($response)
+    function __construct($response, $originLat, $originLong)
     {
         $this->response = $response;
+        $this->originLat = $originLat;
+        $this->originLong = $originLong;
     }
 
     public function getCollection()
@@ -26,10 +28,13 @@ class FoursquareSearchNearbyTransformer implements TransformerInterface
     }
 
     protected function transform($entity) {
+        $lat = $entity->location->lat;
+        $long = $entity->location->lng;
         return new GeneralNearbyPlace([
             'name' => $entity->name,
-            'lat' => $entity->location->lat,
-            'long' => $entity->location->lng,
+            'lat' => $lat,
+            'long' => $long,
+            'distance' => $this->getDistance($lat, $long),
         ]);
     }
 }

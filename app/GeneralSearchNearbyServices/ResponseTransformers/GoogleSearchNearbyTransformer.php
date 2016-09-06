@@ -1,16 +1,22 @@
 <?php namespace App\GeneralSearchNearbyServices\ResponseTransformers;
 
+use AnthonyMartin\GeoLocation\GeoLocation;
 use App\Support\Contracts\TransformerInterface;
 use App\DTOs\GeneralNearbyPlace;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Collection;
 
-class GoogleSearchNearbyTransformer implements TransformerInterface
+class GoogleSearchNearbyTransformer extends AbstractSearchNearbyTransformer implements TransformerInterface
 {
     protected $response;
+    protected $originLat;
+    protected $originLong;
 
-    function __construct($response)
+    function __construct($response, $originLat, $originLong)
     {
         $this->response = $response;
+        $this->originLat = $originLat;
+        $this->originLong = $originLong;
     }
 
     public function getCollection()
@@ -26,11 +32,17 @@ class GoogleSearchNearbyTransformer implements TransformerInterface
     }
 
     protected function transform($entity) {
+        $lat = $entity->geometry->location->lat;
+        $long = $entity->geometry->location->lng;
+
         return new GeneralNearbyPlace([
             'id' => $entity->place_id,
             'name' => $entity->name,
-            'lat' => $entity->geometry->location->lat,
-            'long' => $entity->geometry->location->lng,
+            'lat' => $lat,
+            'long' => $long,
+            'distance' => $this->getDistance($lat, $long),
         ]);
     }
+
+
 }

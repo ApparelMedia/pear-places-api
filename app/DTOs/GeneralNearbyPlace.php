@@ -22,4 +22,6 @@ class GeneralNearbyPlace extends AbstractDTO
     public $long;
 
     public $id;
+
+    public $distance;
 }

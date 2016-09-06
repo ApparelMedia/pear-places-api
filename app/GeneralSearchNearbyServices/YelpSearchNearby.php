@@ -58,7 +58,7 @@ class YelpSearchNearby extends AbstractSearchNearbyService
                 'authorization' => "Bearer {$this->getAccessToken()}"
             ]
         ]);
-        $transformer = new $this->transformerClass(json_decode($res->getBody()));
+        $transformer = new $this->transformerClass(json_decode($res->getBody()), $lat, $long);
         return $transformer->getCollection();
     }
 

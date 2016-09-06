@@ -25,6 +25,10 @@ class PlaceController extends Controller
         }
 
         $result = $searchNearby->searchNearby($lat, $long, $type, $radius);
-        return response()->json($result);
+        $output = $result
+            ->sortBy('distance')
+            ->values()
+            ->all();
+        return response()->json($output);
     }
 }
