@@ -9,9 +9,10 @@ class YelpSearchNearby extends AbstractSearchNearbyService
     protected $appId;
     protected $appSecret;
     protected $transformerClass;
+    protected $client;
     protected $defaultType = 'restaurants';
 
-    function __construct($appId, $appSecret, $transformer) {
+    function __construct($appId, $appSecret, $transformer, Client $client) {
         $this->appId = $appId;
         $this->appSecret = $appSecret;
         $this->transformerClass = $transformer;
@@ -44,7 +45,6 @@ class YelpSearchNearby extends AbstractSearchNearbyService
     {
         $config = $this->getConfigArray($lat, $long, $type, $radius);
 
-        $client = new Client();
         $path = 'https://api.yelp.com/v3/businesses/search';
         $queries = [
             'latitude' => $config['lat'],
@@ -52,7 +52,7 @@ class YelpSearchNearby extends AbstractSearchNearbyService
             'radius' => $config['radius'],
             'categories' => $config['type'],
         ];
-        $res = $client->request('GET', $path, [
+        $res = $this->client->request('GET', $path, [
             'query' => $queries,
             'headers' => [
                 'authorization' => "Bearer {$this->getAccessToken()}"

@@ -7,17 +7,18 @@ class GoogleSearchNearby extends AbstractSearchNearbyService
 {
     protected $apiKey;
     protected $transformerClass;
+    protected $client;
     protected $defaultType = 'bar';
 
-    function __construct($apiKey, $transformerClass)
+    function __construct($apiKey, $transformerClass, Client $client)
     {
         $this->apiKey = $apiKey;
         $this->transformerClass = $transformerClass;
+        $this->client = $client;
     }
 
     public function searchNearby($lat, $long, $type = null, $radius = null) {
         $config = $this->getConfigArray($lat, $long, $type, $radius);
-        $client = new Client();
         $path = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json';
         $queries = [
             'key' => $this->apiKey,
@@ -25,7 +26,7 @@ class GoogleSearchNearby extends AbstractSearchNearbyService
             'radius' => $config['radius'],
             'type' => $config['type'],
         ];
-        $res = $client->request('GET', $path, ['query' => $queries]);
+        $res = $this->client->request('GET', $path, ['query' => $queries]);
         $transformer = new $this->transformerClass(json_decode($res->getBody()), $lat, $long);
         return $transformer->getCollection();
     }

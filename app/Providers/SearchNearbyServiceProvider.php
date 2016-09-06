@@ -8,6 +8,7 @@ use App\GeneralSearchNearbyServices\ResponseTransformers\GoogleSearchNearbyTrans
 use App\GeneralSearchNearbyServices\ResponseTransformers\YelpSearchNearbyTransformer;
 use App\GeneralSearchNearbyServices\YelpSearchNearby;
 use App\SponsorSearchNearbyServices\SponsorSearchNearbyFactory;
+use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
 
 class SearchNearbyServiceProvider extends ServiceProvider
@@ -19,15 +20,19 @@ class SearchNearbyServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->bind('GuzzleClient', function() {
+            return new Client();
+        });
+
         $generalSearches = [
             'google' => function () {
-                return new GoogleSearchNearby(env('GOOGLE_API_KEY'), GoogleSearchNearbyTransformer::class);
+                return new GoogleSearchNearby(env('GOOGLE_API_KEY'), GoogleSearchNearbyTransformer::class, app('GuzzleClient'));
             },
             'yelp' => function () {
-                return new YelpSearchNearby(env('YELP_APP_ID'), env('YELP_APP_SECRET'), YelpSearchNearbyTransformer::class);
+                return new YelpSearchNearby(env('YELP_APP_ID'), env('YELP_APP_SECRET'), YelpSearchNearbyTransformer::class, app('GuzzleClient'));
             },
             'foursquare' => function () {
-                return new FoursquareSearchNearby(env('FOURSQUARE_CLIENT_ID'), env('FOURSQUARE_CLIENT_SECRET'), FoursquareSearchNearbyTransformer::class);
+                return new FoursquareSearchNearby(env('FOURSQUARE_CLIENT_ID'), env('FOURSQUARE_CLIENT_SECRET'), FoursquareSearchNearbyTransformer::class, app('GuzzleClient'));
             },
         ];
 
