@@ -15,6 +15,8 @@ class PlaceController extends Controller
         $long = request('long');
         $sponsor = request('sponsor');
         $general = request('general') ?: 'google';
+        $type = request('type');
+        $radius = request('radius') ? (int) request('radius') : null;
 
         if ($sponsor) {
             $searchNearby = $sponsorFactory->make($sponsor);
@@ -22,7 +24,7 @@ class PlaceController extends Controller
             $searchNearby = $generalFactory->make($general);
         }
 
-        $result = $searchNearby->searchNearby($lat, $long);
+        $result = $searchNearby->searchNearby($lat, $long, $type, $radius);
         return response()->json($result);
     }
 }

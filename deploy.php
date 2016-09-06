@@ -24,12 +24,6 @@ task('copy:dotenv', function () {
     run("cp $sourceDotEnv $targetDotEnv");
 })->desc('Copying .env file from file published by CI WebOps');
 
-task('opcache:clear', function () {
-    $adapter = new \CacheTool\Adapter\FastCGI('127.0.0.1:9000', $tempDir = '/tmp');
-    $cache = \CacheTool\CacheTool::factory($adapter);
-    $cache->opcache_reset();
-})->desc('Clear OpCache');
-
 after('deploy:symlink', 'copy:dotenv');
 
 /**
@@ -45,7 +39,6 @@ task('deploy', [
     'deploy:symlink',
     'cleanup',
     'artisan:cache:clear',
-    'opcache:clear',
     'success',
 ])->desc('Deploy your project');
 

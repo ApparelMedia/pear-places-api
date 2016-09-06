@@ -16,10 +16,21 @@ Route::get('/', function () {
 });
 
 Route::get('test', function () {
-   return response()->json(['status' => 'successful', 'version' => '0.1.0']);
+   return response()->json(['status' => 'successful', 'version' => '0.1.3']);
 });
 
 Route::get('/places/nearby', ['uses' => 'PlaceController@searchNearby']);
 
 Route::post('venues/batch', ['uses' => 'VenueController@batchCreate']);
 Route::resource('venues', 'VenueController');
+
+Route::get('opcache/clear', function () {
+
+    if (function_exists('opcache_reset')) {
+        opcache_reset();
+    } else {
+        return response('looks like OpCache is not enabled');
+    }
+
+    return response('OPCache Cleared!');
+});

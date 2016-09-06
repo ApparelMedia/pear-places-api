@@ -9,6 +9,7 @@ class YelpSearchNearby extends AbstractSearchNearbyService
     protected $appId;
     protected $appSecret;
     protected $transformerClass;
+    protected $defaultType = 'restaurants';
 
     function __construct($appId, $appSecret, $transformer) {
         $this->appId = $appId;
@@ -39,15 +40,17 @@ class YelpSearchNearby extends AbstractSearchNearbyService
 
     }
 
-    public function searchNearby($lat, $long)
+    public function searchNearby($lat, $long, $type = null, $radius = null)
     {
+        $config = $this->getConfigArray($lat, $long, $type, $radius);
+
         $client = new Client();
         $path = 'https://api.yelp.com/v3/businesses/search';
         $queries = [
-            'latitude' => $lat,
-            'longitude' => $long,
-            'radius' => $this->searchRadiusMeters,
-            'categories' => 'restaurants',
+            'latitude' => $config['lat'],
+            'longitude' => $config['long'],
+            'radius' => $config['radius'],
+            'categories' => $config['type'],
         ];
         $res = $client->request('GET', $path, [
             'query' => $queries,
