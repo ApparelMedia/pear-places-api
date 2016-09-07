@@ -26,17 +26,5 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         return $app;
     }
 
-    protected function makeApiClientMockFunction($apiPath, $queryArray, $responseText)
-    {
-        return function () use ($apiPath, $responseText, $queryArray) {
-            $client = m::mock(\GuzzleHttp\Client::class);
-            $response = m::mock(\GuzzleHttp\Psr7\Response::class);
-            $response->shouldReceive('getBody')->once()->andReturn($responseText);
-            $client->shouldReceive('request')
-                ->with('GET', $apiPath, $queryArray)
-                ->once()
-                ->andReturn($response);
-            return $client;
-        };
-    }
+
 }

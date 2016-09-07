@@ -31,10 +31,12 @@ class FoursquareSearchNearbyTransformer extends AbstractSearchNearbyTransformer 
         $lat = $entity->location->lat;
         $long = $entity->location->lng;
         return new GeneralNearbyPlace([
+            'id' => $entity->id,
             'name' => $entity->name,
             'lat' => $lat,
             'long' => $long,
             'distance' => $this->getDistance($lat, $long),
+            'address' => isset($entity->location->address) ? $entity->location->address . ', ' . $entity->location->city : null,
         ]);
     }
 }

@@ -33,10 +33,12 @@ class YelpSearchNearbyTransformer extends AbstractSearchNearbyTransformer implem
         $lat = $entity->coordinates->latitude;
         $long = $entity->coordinates->longitude;
         return new GeneralNearbyPlace([
+            'id' => $entity->id,
             'name' => $entity->name,
             'lat' => $lat,
             'long' => $long,
             'distance' => $this->getDistance($lat, $long),
+            'address' => $entity->location->address1 . ', ' . $entity->location->city,
         ]);
     }
 }

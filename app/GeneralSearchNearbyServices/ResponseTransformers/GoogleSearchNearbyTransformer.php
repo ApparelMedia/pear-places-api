@@ -41,6 +41,7 @@ class GoogleSearchNearbyTransformer extends AbstractSearchNearbyTransformer impl
             'lat' => $lat,
             'long' => $long,
             'distance' => $this->getDistance($lat, $long),
+            'address' => $entity->vicinity,
         ]);
     }
 

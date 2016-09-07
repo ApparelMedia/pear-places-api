@@ -35,7 +35,8 @@ class FoursquareSearchNearby extends AbstractSearchNearbyService
             'categoryId' => $config['type'],
         ];
         $res = $this->client->request('GET', $path, ['query' => $queries]);
-        $transformer = new $this->transformerClass(json_decode($res->getBody()), $lat, $long);
+        $data = json_decode($res->getBody());
+        $transformer = new $this->transformerClass( $data, $lat, $long);
         return $transformer->getCollection();
     }
 
