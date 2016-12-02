@@ -1,6 +1,7 @@
 <?php namespace Deployer;
 
 require 'recipe/laravel.php';
+require 'vendor/deployer/recipes/cachetool.php';
 
 set('ssh_type', 'ext-ssh2');
 set('default_stage', 'staging');
@@ -19,13 +20,13 @@ set('shared_dirs', [
 ]);
 
 task('copy:dotenv', function () {
-    $sourceDotEnv = env('deploy_path') . '/shared/.env.' . env('stage_name');
-    $targetDotEnv = env('deploy_path') .'/shared/.env';
+    $sourceDotEnv = get('deploy_path') . '/shared/.env.' . get('stage_name');
+    $targetDotEnv = get('deploy_path') .'/shared/.env';
     run("cp $sourceDotEnv $targetDotEnv");
 })->desc('Copying .env file from file published by CI WebOps');
 
 after('deploy:symlink', 'copy:dotenv');
-
+after('deploy:symlink', 'cachetool:clear:opcache');
 /**
  * Main task (Overwritting Default Laravel Task
  */
@@ -44,20 +45,20 @@ task('deploy', [
 
 // Production Server
 server('prod1', 'prod1.places')
-    ->configFile('/home/vagrant/.ssh/config')
-    ->env('deploy_path', '/opt/pear-places-api')
-    ->env('stage_name', 'production')
+    ->configFile('~/.ssh/config')
+    ->set('deploy_path', '/opt/pear-places-api')
+    ->set('stage_name', 'production')
     ->stage('production');
 
 server('prod2', 'prod2.places')
-    ->configFile('/home/vagrant/.ssh/config')
-    ->env('deploy_path', '/opt/pear-places-api')
-    ->env('stage_name', 'production')
+    ->configFile('~/.ssh/config')
+    ->set('deploy_path', '/opt/pear-places-api')
+    ->set('stage_name', 'production')
     ->stage('production');
 
 // Staging Server
 server('stage1', 'stage1.places')
-    ->configFile('/home/vagrant/.ssh/config')
-    ->env('deploy_path', '/opt/pear-places-api')
-    ->env('stage_name', 'staging')
+    ->configFile('~/.ssh/config')
+    ->set('deploy_path', '/opt/pear-places-api')
+    ->set('stage_name', 'staging')
     ->stage('staging');
